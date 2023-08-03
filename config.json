@@ -1,0 +1,8 @@
+{
+    "token": "YourTokenHere",
+    "name": "Example",
+    "database": "database.db",
+    "webhooks": {
+        "default": "YourWebhookHere"
+    }
+}
