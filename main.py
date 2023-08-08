@@ -56,7 +56,7 @@ class DiscordBot(commands.Bot):
         print(f"[{type.capitalize()}] {text}")
         payload = {"content": f"**[{type.capitalize()}]** <t:{round(time.time())}:f> {message}"}
         try:
-            requests.post(self.config["log_webhooks"][model], json=payload)
+            requests.post(self.config["webhooks"][model], json=payload)
         except Exception:
             return False
         else:
