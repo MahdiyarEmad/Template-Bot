@@ -1,4 +1,4 @@
-import discord, json, requests, time, aiosqlite, os
+import discord, json, time, aiosqlite, os, aiohttp
 from discord.ext import commands
 
 
@@ -15,7 +15,7 @@ class DiscordBot(commands.Bot):
         """ Start database connection when bot run """
         self.db = await aiosqlite.connect(self.config["database"])
         if self.db:
-            self.send_log("success", "**Database** successfully connected.", "console")
+            await self.send_log("success", "**Database** successfully connected.")
         await super().start(*args, **kwargs)
 
 
@@ -24,43 +24,48 @@ class DiscordBot(commands.Bot):
         for filename in os.listdir("./cogs"):
             if filename.endswith(".py"):
                 await bot.load_extension(f"cogs.{filename[:-3]}")
+                await self.send_log("info", f"Cog **{filename[:-3]}** successfully loaded.")
 
 
     async def on_ready(self):
         """ Run when bot is ready """
-        self.send_log("success", "Bot is **Up** and **Ready**!")
+        await self.send_log("info", "Bot is **Up** and **Ready**!")
 
         try:
             synced = await self.tree.sync()
-            self.send_log("success", f"Synced `{len(synced)}` command(s)")
+            await self.send_log("info", f"Synced `{len(synced)}` command(s)")
         except Exception as e:
-            self.send_log("error", e)
+            await self.send_log("error", e)
 
 
     async def close(self):
         """ Close database when bot is down """
         if self.db is not None:
             await self.db.close()
-            self.send_log("warning", "**Database** successfully disconnected!")
+            await self.send_log("success", "**Database** successfully disconnected!")
         await super().close()
 
 
-    def send_log(self, type: str, message: str, model: str = "default"):
+    async def send_log(self, type: str, message: str, model: str = "default"):
         """ Advance logging system """
         if type not in ["success", "error", "info", "warning"]:
-            type = "unknown"
+            raise ValueError("The entered type unknown enter valid type")
         if model not in self.config["webhooks"]:
-            model = "default"
+            raise ValueError("The entered model unknown enter valid model")
 
         text = message.replace("*", "").replace("`", "")
         print(f"[{type.capitalize()}] {text}")
         payload = {"content": f"**[{type.capitalize()}]** <t:{round(time.time())}:f> {message}"}
-        try:
-            requests.post(self.config["webhooks"][model], json=payload)
-        except Exception:
-            return False
-        else:
-            return True
+        
+        async with aiohttp.ClientSession() as session:
+            try:
+                await session.post(self.config["webhooks"][model], json=payload)
+            except Exception as e:
+                print(e)
+                return False
+            else:
+                return True
+
         
 intents = discord.Intents.all()
 bot = DiscordBot("!", intents)
