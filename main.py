@@ -11,6 +11,13 @@ class DiscordBot(commands.Bot):
             self.config = json.load(f)
     
 
+    def embed(self, *args, **kwargs):
+        """ Return a embed with custom embed """
+        embed = discord.Embed(*args, **kwargs)
+        embed.set_footer(text=self.config["footer"]["text"], icon_url=self.config["footer"]["icon"])
+        return embed
+
+
     async def start(self, *args, **kwargs):
         """ Start database connection when bot run """
         self.db = await aiosqlite.connect(self.config["database"])

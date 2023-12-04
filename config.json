@@ -1,6 +1,9 @@
 {
     "token": "YourTokenHere",
-    "name": "Example",
+    "footer": {
+        "text": "Example",
+        "icon": "IconURL"
+    },
     "database": "database.db",
     "webhooks": {
         "default": "YourWebhookHere"
