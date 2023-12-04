@@ -9,7 +9,7 @@ class DiscordBot(commands.Bot):
         self.db = None
         with open("config.json") as f:
             self.config = json.load(f)
-    
+
 
     def embed(self, *args, **kwargs):
         """ Return a embed with custom embed """
