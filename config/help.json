@@ -1,0 +1,11 @@
+[
+    {
+        "name": "Useful Commands",
+        "commands": [
+            {
+                "name": "help",
+                "description": "You can use this for getting some help for using bot."
+            }
+        ]
+    }
+]

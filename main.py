@@ -40,9 +40,20 @@ class DiscordBot(commands.Bot):
 
         try:
             synced = await self.tree.sync()
+            for sync in synced:
+                await self.send_log("success", "Command `%s` synced." % sync.name)
             await self.send_log("info", f"Synced `{len(synced)}` command(s)")
         except Exception as e:
             await self.send_log("error", e)
+
+    
+    async def on_command_error(self, context: commands.Context, exception: commands.CommandError):
+        await context.reply(f"This command has error.\n- Error: `{exception}`")
+        await self.send_log("error", f"**Command Error** - `@{context.author.name}#{context.author.discriminator} ({context.author.id})` Error: `{exception}`")
+
+
+    async def on_error(self, event: str, *args, **kwargs):
+        await self.send_log("error", f"**Error** - Error: `{event}`")
 
 
     async def close(self):
@@ -62,16 +73,11 @@ class DiscordBot(commands.Bot):
 
         text = message.replace("*", "").replace("`", "")
         print(f"[{type.capitalize()}] {text}")
-        payload = {"content": f"**[{type.capitalize()}]** <t:{round(time.time())}:f> {message}"}
-        
+
         async with aiohttp.ClientSession() as session:
-            try:
-                await session.post(self.config["webhooks"][model], json=payload)
-            except Exception as e:
-                print(e)
-                return False
-            else:
-                return True
+            webhook = discord.Webhook.from_url(self.config["webhooks"].get(model), session=session)
+            await webhook.send(f"**[{type.capitalize()}]** <t:{round(time.time())}:f> {message}")\
+    
 
         
 intents = discord.Intents.all()
