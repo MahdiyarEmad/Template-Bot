@@ -1,11 +1,6 @@
-[
-    {
-        "name": "Useful Commands",
-        "commands": [
-            {
-                "name": "help",
-                "description": "You can use this for getting some help for using bot."
-            }
-        ]
+{
+    "footer": {
+        "text": "Developed by @user_id",
+        "icon_url": "YourIconUrlHere"
     }
-]
+}

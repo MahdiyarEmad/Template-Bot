@@ -48,12 +48,12 @@ class DiscordBot(commands.Bot):
 
     
     async def on_command_error(self, context: commands.Context, exception: commands.CommandError):
-        await context.reply(f"This command has error.\n- Error: `{exception}`")
+        await context.reply(f"Use slash `(/)` commands.\n- Error: `{exception}`")
         await self.send_log("error", f"**Command Error** - `@{context.author.name}#{context.author.discriminator} ({context.author.id})` Error: `{exception}`")
 
 
     async def on_error(self, event: str, *args, **kwargs):
-        await self.send_log("error", f"**Error** - Error: `{event}`")
+        await self.send_log("error", f"**Error** - Error: `{event}` Args: `{args}` Kwargs: `{kwargs}`")
 
 
     async def close(self):
@@ -71,12 +71,12 @@ class DiscordBot(commands.Bot):
         if model not in self.config["webhooks"]:
             raise ValueError("The entered model unknown enter valid model")
 
-        text = message.replace("*", "").replace("`", "")
+        text = str(message).replace("*", "").replace("`", "")
         print(f"[{type.capitalize()}] {text}")
 
         async with aiohttp.ClientSession() as session:
             webhook = discord.Webhook.from_url(self.config["webhooks"].get(model), session=session)
-            await webhook.send(f"**[{type.capitalize()}]** <t:{round(time.time())}:f> {message}")\
+            await webhook.send(f"**[{type.capitalize()}]** <t:{round(time.time())}:f> {message}")
     
 
         
