@@ -11,11 +11,16 @@ class DiscordBot(commands.Bot):
             self.config = json.load(f)
 
 
-    def embed(self, *args, **kwargs):
-        """ Return a embed with custom embed """
-        embed = discord.Embed(*args, **kwargs)
-        embed.set_footer(text=self.config["footer"]["text"], icon_url=self.config["footer"]["icon"])
-        return embed
+    async def get_api(self, api):
+        """ Helps to get api """
+        async with aiohttp.ClientSession() as session:
+            async with session.get(api) as response:
+                try:
+                    response.raise_for_status()
+                except Exception:
+                    return False
+                else:
+                    return await response.json()
 
 
     async def start(self, *args, **kwargs):
