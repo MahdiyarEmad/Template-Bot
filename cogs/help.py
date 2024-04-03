@@ -1,3 +1,4 @@
+from typing import Coroutine
 import discord, json
 from discord import app_commands
 from discord.ext import commands
@@ -11,6 +12,11 @@ class Help(commands.Cog):
     def __init__(self, bot: commands.Bot):
         super().__init__()
         self.bot = bot
+
+
+    def cog_unload(self):
+        with open('config/help.json', 'w') as f:
+            json.dump(config, f, indent=4)
 
     
     @app_commands.command(name="help", description="List all available command(s)")
