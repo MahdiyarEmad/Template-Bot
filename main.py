@@ -1,5 +1,4 @@
 import discord, json, time, aiosqlite, os, aiohttp
-from pymongo.mongo_client import MongoClient
 from discord.ext import commands
 
 
@@ -26,13 +25,6 @@ class DiscordBot(commands.Bot):
 
     async def start(self, *args, **kwargs):
         """ Start database connection when bot run """
-        # client = MongoClient(self.config["mongodb"]["uri"])
-        # try:
-        #     client.admin.command('ping')
-        #     await self.send_log("success", "Pinged your deployment. You successfully connected to **MongoDB**!")
-        #     self.mongodb = client.get_database(self.config["mongodb"]["database"])
-        # except Exception as e:
-        #     await self.send_log("error", f"Error: `{e}`")
 
         self.db = await aiosqlite.connect(self.config["database"])
         if self.db:
