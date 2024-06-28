@@ -7,7 +7,7 @@ class DiscordBot(commands.Bot):
         """ Maintain class """
         super().__init__(command_prefix, intents=intents)
         self.db = None
-        with open("test.json") as f:
+        with open("config.json") as f:
             self.config = json.load(f)
 
 
