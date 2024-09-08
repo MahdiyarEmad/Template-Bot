@@ -1,7 +1,4 @@
 {
     "token": "YourTokenHere",
-    "database": "database.db",
-    "webhooks": {
-        "default": "YourWebhookHere"
-    }
+    "database": "database.db"
 }
