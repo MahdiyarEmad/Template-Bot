@@ -1,4 +1,9 @@
 {
     "token": "YourTokenHere",
-    "database": "database.db"
+    "database": "database.db",
+    "acl": {
+        "consoles": [],
+        "admins": [],
+        "supporters": []
+    }
 }
