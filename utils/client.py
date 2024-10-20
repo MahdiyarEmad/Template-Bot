@@ -4,6 +4,7 @@ import json
 import aiosqlite
 from .logs import send_log
 from .database import SQLite
+from .acl import ACL
 
 
 class DiscordBot(commands.Bot):
@@ -14,6 +15,7 @@ class DiscordBot(commands.Bot):
         self.debug = debug
         with open("config.json") as f:
             self.config = json.load(f)
+        self.acl = ACL(self.config["acl"])
     
 
     async def start(self, *args, **kwargs):
