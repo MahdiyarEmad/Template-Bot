@@ -1,7 +1,6 @@
 import discord, os
 from discord.ext import commands
 import json
-import aiosqlite
 from .logs import send_log
 from .database import SQLite
 from .acl import ACL
@@ -15,7 +14,7 @@ class DiscordBot(commands.Bot):
         self.debug = debug
         with open("config.json") as f:
             self.config = json.load(f)
-        self.acl = ACL(self.config["acl"])
+        self.acl = ACL()
     
 
     async def start(self, *args, **kwargs):
@@ -39,6 +38,8 @@ class DiscordBot(commands.Bot):
         await send_log("info", "Bot is **Up** and **Ready**!")
 
         try:
+            for guild in self.acl.guilds:
+                await self.tree.sync(guild=guild)
             synced = await self.tree.sync()
             for sync in synced:
                 await send_log("success", "Command `%s` synced." % sync.name)
