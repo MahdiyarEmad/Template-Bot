@@ -1,6 +1,7 @@
 import discord, os
 from discord.ext import commands
 import json
+import aiosqlite
 from .logs import send_log
 from .database import SQLite
 from .acl import ACL
@@ -11,6 +12,7 @@ class DiscordBot(commands.Bot):
         """ Maintain class """
         super().__init__(command_prefix, intents=intents)
         self.db = None
+        self.cdb = None
         self.debug = debug
         with open("config.json") as f:
             self.config = json.load(f)
@@ -19,9 +21,10 @@ class DiscordBot(commands.Bot):
 
     async def start(self, *args, **kwargs):
         """ Start database connection when bot run """
-        self.db = await SQLite(self.bot)
+        self.db = await aiosqlite.connect(self.config["database"])
         if self.db:
             await send_log("success", "**Database** successfully connected.")
+            self.cdb = SQLite(self)
         await super().start(*args, **kwargs)
 
 

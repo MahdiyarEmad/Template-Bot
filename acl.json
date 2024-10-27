@@ -1,5 +1,13 @@
 {
     "guilds": [],
-    "users": {},
-    "roles": {}
+    "users": {
+        "consoles": [],
+        "admins": [],
+        "supporters": []
+    },
+    "roles": {
+        "consoles": [],
+        "admins": [],
+        "supporters": []
+    }
 }

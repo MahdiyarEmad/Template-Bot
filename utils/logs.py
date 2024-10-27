@@ -2,7 +2,7 @@ import aiohttp, discord, json, time, asyncio
 
 
 with open("config.json") as f:
-    webhooks = json.load(f)
+    webhooks = json.load(f)["webhooks"]
 
 
 async def send_log(type: str, message: str, model: str = "default", *, limit: int = 2000):

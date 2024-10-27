@@ -1,6 +1,6 @@
 {
     "footer": {
         "text": "Developed by @user_id",
-        "icon_url": "YourIconUrlHere"
+        "icon_url": "icon_url"
     }
 }

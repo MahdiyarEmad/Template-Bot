@@ -1,9 +1,8 @@
 {
-    "token": "YourTokenHere",
+    "token": "Tokens",
     "database": "database.db",
-    "acl": "config/acl.json",
     "webhooks": {
-        "default": "ConsoleWebhookHere",
-        "debug": "DebugWebhookHere"
+        "default": "YourConsoleWebhook",
+        "debug": "DebugWebhook"
     }
 }

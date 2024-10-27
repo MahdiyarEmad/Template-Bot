@@ -1,8 +1,9 @@
 import aiosqlite
-from .client import DiscordBot
+from discord.ext import commands
 
 
 class SQLite:
-    async def __init__(self, bot: DiscordBot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.db = await aiosqlite.connect(bot.config["database"])
+        self.db: aiosqlite.Connection = bot.db
+
