@@ -1,6 +1,13 @@
 {
-    "token": "Tokens",
-    "database": "database.db",
+    "token": "YourBotToken",
+    "database": "mysql",
+    "mysql": {
+        "database": "YourDBName",
+        "host": "127.0.0.1",
+        "password": "YourPassword",
+        "port": 3306,
+        "user": "root"
+    },
     "webhooks": {
         "default": "YourConsoleWebhook",
         "debug": "DebugWebhook"
