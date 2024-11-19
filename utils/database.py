@@ -7,7 +7,7 @@ class DataSQL():
     def __init__(self, host: str = "127.0.0.1", port: int = 3306, loop: Optional[asyncio.AbstractEventLoop] = None) -> None:
         self.loop, self.host, self.port = loop, host, port
 
-    async def auth(self, user: str = "root", password: str = '', database: str = "mysql", autocommit: bool = True) -> None:
+    async def auth(self, user: str = "root", password: str = "", database: str = "mysql", autocommit: bool = True) -> None:
         self.__authUser, self.__authPassword, self.__authDatabase, self.__authAutocommit = user, password, database, autocommit
         self.pool: aiomysql.pool.Pool = await aiomysql.create_pool(
             host=self.host,
