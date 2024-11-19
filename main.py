@@ -1,11 +1,14 @@
-import discord, utils, json, os
+import discord, utils, json, os, aiohttp, asyncio
 from logging import Logger, INFO
 import logging
+import time
 from discord.ext import commands
+
 
 PREFIXES = ["!"]
 INTENTS = discord.Intents.all()
 DEBUG_MODE = False
+
 
 class DiscordBot(commands.Bot):
     appinfo: discord.AppInfo
@@ -31,10 +34,39 @@ class DiscordBot(commands.Bot):
         self.acl = utils.ACL()
     
 
+    async def __send_log(self, level: int, message: str, model: str = "default", *, limit: int = 2000):
+        """ Advance logging system """
+        webhooks = self.config["webhooks"]
+        if model not in webhooks:
+            model = "default"
+
+        if level == logging.NOTSET:
+            type = "notset"
+        elif level == logging.DEBUG:
+            type = "debug"
+        elif level == logging.INFO:
+            type = "info"
+        elif level == logging.WARNING:
+            type = "warning"
+        elif level == logging.ERROR:
+            type = "error"
+        elif level == logging.CRITICAL:
+            type = "critical"
+
+        content = f"**[{type.capitalize()}]** <t:{round(time.time())}:f> {str(message)}"
+
+        async with aiohttp.ClientSession() as session:
+            webhook = discord.Webhook.from_url(webhooks.get(model), session=session)
+            for slice in [(content[i:i+limit]) for i in range(0, len(content), limit)]:
+                await webhook.send(slice)
+
+
     def log(self, message: str, name: str, level: int = INFO, **kwargs) -> None:
         """ Log a message to the console and the log file. """
         self.logger.name = name
-        self.logger.log(level = level, msg = message, **kwargs)
+        text = message.replace("*", "").replace("`", "")
+        self.logger.log(level = level, msg = text, **kwargs)
+        self.loop.create_task(self.__send_log(level, message, name))
 
 
     async def start(self, *args, **kwargs):
@@ -97,7 +129,14 @@ class DiscordBot(commands.Bot):
         await super().close()
 
 
-bot = utils.DiscordBot(commands.when_mentioned_or(*PREFIXES), INTENTS, debug=DEBUG_MODE)
+bot = DiscordBot(commands.when_mentioned_or(*PREFIXES), INTENTS, debug=DEBUG_MODE)
 
 if __name__ == "__main__":
-    bot.run(bot.config["token"])
+    file_level = logging.INFO
+    console_level = logging.INFO
+
+    if DEBUG_MODE:
+        file_level = logging.DEBUG
+
+    bot.logger, stream_handler = utils.set_logging(file_level, console_level)
+    bot.run(bot.config["token"], log_handler=stream_handler, log_level=logging.DEBUG)
