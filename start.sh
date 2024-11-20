@@ -12,6 +12,6 @@ else
     source .venv/bin/activate
 fi
 
-pip install -U discord.py aiosqlite PyNaCL
+pip install -U discord.py aiomysql PyNaCL
 
 python3 main.py
