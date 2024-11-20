@@ -1,5 +1,5 @@
 {
-    "token": "MTI3MTkxMTI1MTQxNjQ1MzI4Mg.GRY5bI.i90CvuIaX5ElevRFSRPuKWf1UiYY3FxCz-MKdQ",
+    "token": "YourBotToken",
     "database": "none",
     "mysql": {
         "database": "YourDBName",
@@ -9,7 +9,7 @@
         "user": "root"
     },
     "webhooks": {
-        "default": "https://discord.com/api/webhooks/1308466628509433887/rR55CY6643pEwT0W1RUonbOjUJzavTjb3g9uRWZj8GTywSMjTVPXuBbAdbRlpEEu_aGk",
-        "debug": "https://discord.com/api/webhooks/1308466628509433887/rR55CY6643pEwT0W1RUonbOjUJzavTjb3g9uRWZj8GTywSMjTVPXuBbAdbRlpEEu_aGk"
+        "default": "YourConsoleWebhook",
+        "debug": "YourDebugWebhook"
     }
 }
