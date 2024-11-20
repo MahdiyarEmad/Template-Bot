@@ -26,13 +26,11 @@ class DataSQL():
                     await cursor.execute(query)
                     response = await cursor.fetchall()
                     return response
-
                 except aiomysql.OperationalError as e:
                     if e.args[0] == 2013:  # Lost connection to SQL server during query
                         await self.auth(self.__authUser, self.__authPassword, self.__authDatabase, self.__authAutocommit)
                         return await self.query(query)
                     raise e
-
                 except Exception as e:
                     raise e
                 
