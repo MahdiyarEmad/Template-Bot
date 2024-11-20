@@ -1,5 +1,6 @@
 import logging
 
+
 def set_logging(file_level: int = logging.DEBUG, console_level: int = logging.INFO, filename: str = "discord.log") -> tuple[logging.Logger, logging.StreamHandler]:
 	"""Sets up logging for the bot."""
 	
