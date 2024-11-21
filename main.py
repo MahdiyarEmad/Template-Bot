@@ -5,7 +5,6 @@ import time
 from discord.ext import commands
 
 
-PREFIXES = ["!"]
 INTENTS = discord.Intents.all()
 DEBUG_MODE = False
 
@@ -16,12 +15,12 @@ class DiscordBot(commands.Bot):
     acl: utils.ACL
     logger: Logger
 
-    def __init__(self, command_prefix, intents, *, debug: bool = False):
+    def __init__(self, intents, *, debug: bool = False):
         """ Maintain class """
-        super().__init__(command_prefix, intents=intents)
-        self.debug = debug
         with open("config.json") as f:
             self.config = json.load(f)
+        super().__init__(commands.when_mentioned_or(*self.config["prefixes"]), intents=intents)
+        self.debug = debug
         self.acl = utils.ACL()
     
 
@@ -112,7 +111,7 @@ class DiscordBot(commands.Bot):
         await super().close()
 
 
-bot = DiscordBot(commands.when_mentioned_or(*PREFIXES), INTENTS, debug=DEBUG_MODE)
+bot = DiscordBot(INTENTS, debug=DEBUG_MODE)
 
 if __name__ == "__main__":
     file_level = logging.INFO

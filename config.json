@@ -1,6 +1,7 @@
 {
     "token": "YourBotToken",
     "database": "none",
+    "prefixes": [],
     "mysql": {
         "database": "YourDBName",
         "host": "127.0.0.1",

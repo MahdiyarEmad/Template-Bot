@@ -19,21 +19,21 @@ class DataSQL():
             autocommit=autocommit
         )
 
-    async def query(self, query: str) -> Tuple[Any]:
+    async def execute(self, query: str, args = None) -> Tuple[Any]:
         async with self.pool.acquire() as connection:
             async with connection.cursor() as cursor:
                 try:
-                    await cursor.execute(query)
+                    await cursor.execute(query, args)
                     response = await cursor.fetchall()
                     return response
                 except aiomysql.OperationalError as e:
                     if e.args[0] == 2013:  # Lost connection to SQL server during query
                         await self.auth(self.__authUser, self.__authPassword, self.__authDatabase, self.__authAutocommit)
-                        return await self.query(query)
+                        return await self.execute(query, args)
                     raise e
                 except Exception as e:
                     raise e
-                
+    
     
     async def close(self) -> None:
         self.pool.close()
