@@ -43,7 +43,7 @@ class DiscordBot(commands.Bot):
         """ Advance logging system """
         webhooks = self.config["webhooks"]
         if model not in webhooks:
-            model = "default"
+            model = self.acl.log_model(model)
 
         type = self._level_type(level)
         content = f"**[{type.capitalize()}]** <t:{round(time.time())}:f> {str(message)}"

@@ -21,6 +21,10 @@ class ACL:
         self.guild_ids = acl["guilds"]
 
 
+    def log_model(self, name: str, *, default: str = "default") -> str:
+        return acl["logs"].get(name, default)
+
+
     def is_console(self, interaction: discord.Interaction) -> bool:
         """ Determine if the user is an console. """
         return interaction.user.id in acl["users"]["consoles"] or have_role(interaction.user, acl["roles"]["consoles"])
