@@ -34,6 +34,13 @@ class DataSQL():
                 except Exception as e:
                     raise e
     
+
+    async def execute_fetchone(self, query: str, args = None):
+        result = await self.execute(query, args)
+        if any(result):
+            return result[0]
+        
+        return None
     
     async def close(self) -> None:
         self.pool.close()
