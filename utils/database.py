@@ -41,6 +41,23 @@ class DataSQL():
             return result[0]
         
         return None
+
+
+    
+    async def execute_insert(self, query: str, args = None):
+        async with self.pool.acquire() as connection:
+            async with connection.cursor() as cursor:
+                try:
+                    await cursor.execute(query, args)
+                    return cursor.lastrowid
+                except aiomysql.OperationalError as e:
+                    if e.args[0] == 2013:  # Lost connection to SQL server during query
+                        await self.auth(self.__authUser, self.__authPassword, self.__authDatabase, self.__authAutocommit)
+                        return await self.execute_insert(query, args)
+                    raise e
+                except Exception as e:
+                    raise e
+
     
     async def close(self) -> None:
         self.pool.close()
