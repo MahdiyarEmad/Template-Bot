@@ -28,7 +28,10 @@ class Help(commands.Cog):
             text += "- `/%s` - %s\n" % (command.name, command.description)
 
         embed = discord.Embed(title="Command List", colour=discord.Colour.blurple(), description=text)
-        embed.set_footer(text=config["footer"]["text"], icon_url=config["footer"]["icon_url"])
+        embed.set_footer(
+            text=config["footer"].get("text", None), 
+            icon_url=config["footer"].get("icon_url", None)
+        )
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 

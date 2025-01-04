@@ -26,6 +26,18 @@ class ACL:
         return acl["logs"].get(name, default)
 
 
+    def is_guild(self, target: Union[discord.Interaction, discord.Guild, commands.Context, discord.Member]) -> bool:
+        """ Determine if the user is in the guild. """
+        if isinstance(target, discord.Interaction):
+            return target.guild_id in self.guild_ids
+        elif isinstance(target, discord.Member):
+            return target.guild.id in self.guild_ids
+        elif isinstance(target, discord.Guild):
+            return target.id in self.guild_ids
+        elif isinstance(target, commands.Context):
+            return target.guild.id in self.guild_ids
+
+
     def is_console(self, target: Union[discord.Interaction, discord.User, commands.Context, discord.Member]) -> bool:
         """ Determine if the user is an console. """
         if isinstance(target, discord.Interaction):
