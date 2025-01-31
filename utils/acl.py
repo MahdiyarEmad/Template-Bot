@@ -9,6 +9,9 @@ with open("acl.json") as f:
 
 
 def have_role(user: discord.Member, roles: List[int]) -> bool:
+    if not isinstance(user, discord.Member):
+        return False
+
     return any([user.get_role(role) for role in roles])
 
 
